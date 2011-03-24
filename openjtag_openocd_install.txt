@@ -1,0 +1,40 @@
+1.安装openjtag
+        复制50-ftdi.rules到/etc/udev/rules.d/下,重新启动.
+        
+2.安装libusb-dev
+        sudo apt-get install libusb-dev
+        
+3.安装libftdi-dev
+        sudo apt-get install libftdi-dev
+        
+4.安装openocd-0.4.0
+        tar jxvf openocd-0.4.0.tar.bz2
+        cd openocd-0.4.0
+        ./configure --prefix=/opt/openocd --enable-maintainer-mode  --enable-ft2232_libftdi
+        make
+        sudo make install
+        
+5.修改~/.bashrc,在最后一行添加
+        PATH=/opt/openocd/bin:$PATH; export PATH
+        
+7.拷贝配置文件到开发的目录
+        emacs openjtag.cfg
+        cp /opt/openocd/share/openocd/scripts/target/stm32.cfg ./
+        
+8.运行openocd
+        openocd -f jlink.cfg -f stm32.cfg
+        
+9.我到结果如下
+bright@bright-laptop:~/work/project$ sudo /opt/openocd/bin/openocd -f openjtag.cfg -f stm32.cfg 
+Open On-Chip Debugger 0.4.0 (2011-03-24-10:26)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.berlios.de/doc/doxygen/bugs.html
+1000 kHz
+jtag_nsrst_delay: 100
+jtag_ntrst_delay: 100
+Info : clock speed 1000 kHz
+Info : JTAG tap: stm32.cpu tap/device found: 0x3ba00477 (mfg: 0x23b, part: 0xba00, ver: 0x3)
+Info : JTAG tap: stm32.bs tap/device found: 0x16410041 (mfg: 0x020, part: 0x6410, ver: 0x1)
+Info : stm32.cpu: hardware has 6 breakpoints, 4 watchpoints
+Warn : stm32.cpu -- clearing lockup after double fault

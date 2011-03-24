@@ -1,0 +1,42 @@
+1.使用新立得安装libusb
+2.复制45-jlink.rules到/etc/udev/rules.d/下,重新启动
+3.添加组plugdev,并且把当前用户添加到这个组里面
+sudo groupadd plugdev
+sudo usermod -a -G plugdev 用户名
+4.解压openocd-0.4.0.tar.bz2
+tar jxvf openocd-0.4.0.tar.bz2
+5.编译openocd
+cd openocd-0.4.0
+./configure --prefix=/opt/openocd --enable-jlink
+make && make install
+6.修改/etc/environment在PATH添加/opt/openocd/bin路径
+sudo gedit /etc/environment
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/opt/openocd/bin"
+7.拷贝配置文件到开发的目录
+cp /opt/openocd/share/openocd/scripts/interface/jlink.cfg ./
+cp /opt/openocd/share/openocd/scripts/target/stm32.cfg ./
+8.运行openocd
+openocd -f jlink.cfg -f stm32.cfg
+我到结果如下：
+rayfox@ubuntu:~/stm32-devel$ openocd -f jlink.cfg -f stm32.cfg 
+Open On-Chip Debugger 0.4.0 (2010-03-30-18:44)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.berlios.de/doc/doxygen/bugs.html
+1000 kHz
+jtag_nsrst_delay: 100
+jtag_ntrst_delay: 100
+Info : J-Link initialization started / target CPU reset initiated
+Info : J-Link ARM V7 compiled Jun 30 2009 11:05:27
+Info : JLink caps 0xb9ff7bbf
+Info : JLink hw version 70000
+Info : JLink max mem block 9152
+Info : Vref = 3.300 TCK = 1 TDI = 0 TDO = 1 TMS = 0 SRST = 0 TRST = 0
+
+Info : J-Link JTAG Interface ready
+Info : clock speed 1000 kHz
+Info : JTAG tap: stm32.cpu tap/device found: 0x3ba00477 (mfg: 0x23b, part: 0xba00, ver: 0x3)
+Info : JTAG tap: stm32.bs tap/device found: 0x16410041 (mfg: 0x020, part: 0x6410, ver: 0x1)
+Info : stm32.cpu: hardware has 6 breakpoints, 4 watchpoints
+
+

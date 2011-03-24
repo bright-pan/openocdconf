@@ -1,0 +1,27 @@
+1.安装openjtag
+        复制50-ftdi.rules到/etc/udev/rules.d/下,重新启动.
+        
+2.安装libusb-dev
+        sudo apt-get install libusb-dev
+        
+3.安装libftdi-dev
+        sudo apt-get install libftdi-dev
+        
+4.安装openocd-0.4.0
+        tar jxvf openocd-0.4.0.tar.bz2
+        cd openocd-0.4.0
+        ./configure --prefix=/opt/openocd --enable-maintainer-mode  --enable-ft2232_libftdi
+        make
+        sudo make install
+        
+5.修改~/.bashrc,在最后一行添加
+        PATH=/opt/openocd/bin:$PATH; export PATH
+        
+7.拷贝配置文件到开发的目录
+        emacs openjtag.cfg
+        cp /opt/openocd/share/openocd/scripts/target/stm32.cfg ./
+        
+8.运行openocd
+        openocd -f jlink.cfg -f stm32.cfg
+        
+9.我到结果如下
